@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getDatabase, onValue, push, ref, set, remove } from "firebase/database"
+import { getDatabase, onValue, push, ref, set, remove, update } from "firebase/database"
 
 const App = () => {
 
@@ -8,16 +8,24 @@ const App = () => {
 
   let [text, setText] = useState("");
   let [todo, setTodo] = useState([]);
+  let [togglebtn, setTogglebtn] = useState(false)
+  let [allinfo, setAllinfo] = useState()
+
+
+
 
   let handleText = (e) => {
     setText(e.target.value)
-
   }
 
   let handleSubmit = () => {
-    set(push(ref(db, "alltodo")), {
-      todotext: text,
-    })
+    text === "" ?
+      alert("please enter the value")
+      :
+      set(push(ref(db, "alltodo")), {
+        todotext: text,
+      })
+    setText("")
   }
 
 
@@ -39,16 +47,29 @@ const App = () => {
 
   let handleDelete = (id) => {
     remove(ref(db, "alltodo/" + id)).then(() => {
-      alert("deleted")
+      alert("Successfully Deleted")
     })
   }
 
 
-  let handleEdit = (id) => {
-    console.log(id)
+  let handleEdit = (item) => {
+    setTogglebtn(true);
+    setAllinfo(item);
+    setText(item.todotext)
   }
 
 
+  let handleUpdate = () => {
+
+    update(ref(db, "alltodo/" + allinfo.id), {
+      ...allinfo,
+      todotext: text,
+    }).then(() => {
+      alert("Successfully Updated")
+      setText("")
+      setTogglebtn(false)
+    })
+  }
 
 
   return (
@@ -56,25 +77,38 @@ const App = () => {
       <div className="todoContent">
         <h2>Todo App</h2>
         <div>
-          <input onChange={handleText} type="text" placeholder="Enter Your Task" />
-          <button className="btn" onClick={handleSubmit}>Add Task</button>
+          <input onChange={handleText} type="text" placeholder="Enter Your Task" value={text} />
+
+          {
+            togglebtn
+              ?
+              <button className="btn" onClick={handleUpdate}>Update</button>
+              :
+              <button className="btn" onClick={handleSubmit}>Add Task</button>
+          }
+
         </div>
 
         <div>
           <ul>
-            {todo.length > 0
-              ?
-              todo.map((item, index) => (
+            {todo.length > 0 ?
+
+              (todo.map((item, index) => (
                 <li key={index}>{item.todotext}
 
-                  <button className="btn" onClick={() => handleDelete(item.id)}>Delete</button>
+                  <button className="btn delete" onClick={() => handleDelete(item.id)}>Delete</button>
 
-                  <button className="btn" onClick={() => handleEdit(item.id)}>Edit</button>
+                  <button className="btn edit" onClick={() => handleEdit(item)}>Edit</button>
 
                 </li>
               ))
-              :
-              <h1>Loading</h1>
+              ) : (todo.length === 0
+                ?
+                <h1>No todo here</h1>
+                :
+                <h2>Loading....</h2>
+
+              )
             }
           </ul>
         </div>

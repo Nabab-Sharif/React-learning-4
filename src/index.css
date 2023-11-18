@@ -7,30 +7,47 @@
 ul,
 li {
   list-style-type: none;
+  color: white;
+  font-size: 20px;
 }
 
 .todoContent {
-  background-color: darkgoldenrod;
+  background-color: rgb(85, 68, 28);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 50%;
   padding: 80px;
-  margin: 0 auto;
+  margin: 50px auto;
 }
 
 .btn {
-  padding: 8px;
-  background-color: dimgray;
+  padding: 10px;
+  background-color: darkcyan;
   color: wheat;
   margin: 5px;
+  outline: none;
+  border: none;
+}
+
+.delete {
+  color: red;
+  background-color: rgb(13, 2, 2);
+  margin-left: 20px;
+}
+
+.edit {
+  color: green;
+  background-color: rgb(38, 56, 59);
+  font-weight: bold;
 }
 
 .todoContent input {
   padding: 10px;
   margin-bottom: 10px;
   outline: none;
+  border: none;
 
 }
 
@@ -38,4 +55,36 @@ li {
 .todoContent h2 {
   margin-bottom: 10px;
 
+}
+
+/* Responsive */
+@media (max-width:766px) {
+
+  .todoContent {
+    width: 86%;
+  }
+
+  .todoContent input {
+    width: 60%;
+
+  }
+
+}
+
+
+
+@media (max-width:767px) {
+
+  .todoContent {
+    background-color: #0a5955;
+    padding: 15px;
+  }
+
+}
+
+@media (max-width:991px) {
+  .todoContent {
+    background-color: rgb(160, 120, 71);
+    padding: 15px;
+  }
 }
